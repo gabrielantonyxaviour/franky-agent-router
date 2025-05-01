@@ -69,6 +69,9 @@ export async function middleware(request: NextRequest) {
       return new NextResponse('Device not found', { status: 404 })
     }
 
+    // Get the pathname from the request URL
+    const pathname = request.nextUrl.pathname
+
     // Handle based on request method
     if (request.method === 'GET') {
       // For GET requests, show instructions page
@@ -99,17 +102,28 @@ export async function middleware(request: NextRequest) {
                 border-radius: 4px;
                 font-family: monospace;
               }
+              .endpoint {
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid rgba(0, 255, 136, 0.2);
+              }
             </style>
           </head>
           <body>
             <div class="container">
               <h1>Agent Interaction Instructions</h1>
               <p>To interact with this agent, please use Postman or any API client to make a POST request to:</p>
-              <code>${device.ngrokUrl}</code>
+              <code>${device.ngrokUrl}${pathname}</code>
               <p>Include your message in the request body as JSON:</p>
               <pre><code>{
   "message": "Your message here"
 }</code></pre>
+              ${pathname !== '/' ? `
+              <div class="endpoint">
+                <p>You're currently viewing the endpoint: <code>${pathname}</code></p>
+                <p>Make sure to include this endpoint in your POST request URL.</p>
+              </div>
+              ` : ''}
             </div>
           </body>
         </html>
@@ -121,17 +135,26 @@ export async function middleware(request: NextRequest) {
         }
       )
     } else if (request.method === 'POST') {
-      // For POST requests, proxy to the ngrok URL
-      const response = await fetch(device.ngrokUrl, {
+      // For POST requests, proxy to the ngrok URL while preserving the path
+      const targetUrl = new URL(pathname, device.ngrokUrl).toString()
+      
+      // Forward the request with the original path
+      const response = await fetch(targetUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          ...request.headers,
+          ...Object.fromEntries(request.headers),
         },
         body: request.body,
       })
 
-      return response
+      // Forward the response with its status and headers
+      const responseHeaders = Object.fromEntries(response.headers)
+      return new NextResponse(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: responseHeaders,
+      })
     }
 
     // For other methods, return method not allowed
