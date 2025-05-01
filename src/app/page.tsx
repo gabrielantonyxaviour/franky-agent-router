@@ -43,7 +43,7 @@ export default function Home() {
         </p>
         
         <div className="flex justify-center">
-          <GlowButton href="https://hedera.frankyagent.xyz">
+          <GlowButton href="https://franky-hedera.vercel.app">
             Launch Product
           </GlowButton>
         </div>
