@@ -4,4 +4,4 @@
 Monetize you old devices by hosting efficient AI agent hosts.
 
 
-Built on Hedera
+Built on Hedera with love.
