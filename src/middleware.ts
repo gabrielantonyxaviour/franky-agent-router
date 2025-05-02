@@ -6,7 +6,7 @@ interface Agent {
   id: string
   subname: string
   device_address: string
-  agentAddress: string  // Added agentAddress field
+  agent_address: string  // Added agentAddress field
   // Add other fields as needed
 }
 
@@ -48,7 +48,7 @@ export async function middleware(request: NextRequest) {
 
     const agent: Agent = await agentResponse.json()
 
-    if (!agent || !agent.device_address || !agent.agentAddress) {
+    if (!agent || !agent.device_address || !agent.agent_address) {
       console.error(`No agent found with subname: ${subdomain}`)
       return new NextResponse('Agent not found', { status: 404 })
     }
@@ -130,7 +130,7 @@ export async function middleware(request: NextRequest) {
     const response = NextResponse.rewrite(rewrittenUrl)
     
     // Add the agent address as a header
-    response.headers.set('agent-address', agent.agentAddress)
+    response.headers.set('agent-address', agent.agent_address)
     
     return response
 
