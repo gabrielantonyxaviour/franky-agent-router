@@ -15,7 +15,6 @@ interface Device {
   address: string
   ngrokUrl: string
   status: string
-  // Add other fields as needed
 }
 
 export async function middleware(request: NextRequest) {
@@ -101,6 +100,12 @@ export async function middleware(request: NextRequest) {
                 border-radius: 4px;
                 font-family: monospace;
               }
+              .note {
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid rgba(0, 255, 136, 0.2);
+                font-size: 0.9rem;
+              }
             </style>
           </head>
           <body>
@@ -112,7 +117,6 @@ export async function middleware(request: NextRequest) {
               <pre><code>{
   "message": "Your message here"
 }</code></pre>
-              <p>Note: The request will automatically include the required agent authentication headers.</p>
             </div>
           </body>
         </html>
@@ -125,13 +129,20 @@ export async function middleware(request: NextRequest) {
       )
     }
 
-    // For all other requests (POST, etc), rewrite to the ngrok URL with agent address header
+    // For all other requests (POST, etc), rewrite to the ngrok URL
     const rewrittenUrl = new URL(device.ngrokUrl + url.pathname + url.search)
-    const response = NextResponse.rewrite(rewrittenUrl)
+
+    // Create headers object from original request headers
+    const headers = new Headers(request.headers)
     
-    // Add the agent address as a header
-    response.headers.set('agent-address', agent.agentAddress)
-    
+    // Add or override the agent address header
+    headers.set('x-agent-address', agent.agentAddress)
+
+    // Create the rewrite response with the modified headers
+    const response = NextResponse.rewrite(rewrittenUrl, {
+      headers: headers,
+    })
+
     return response
 
   } catch (error) {
