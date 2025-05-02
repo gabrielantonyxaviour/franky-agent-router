@@ -6,6 +6,7 @@ interface Agent {
   id: string
   subname: string
   device_address: string
+  agentAddress: string  // Added agentAddress field
   // Add other fields as needed
 }
 
@@ -47,7 +48,7 @@ export async function middleware(request: NextRequest) {
 
     const agent: Agent = await agentResponse.json()
 
-    if (!agent || !agent.device_address) {
+    if (!agent || !agent.device_address || !agent.agentAddress) {
       console.error(`No agent found with subname: ${subdomain}`)
       return new NextResponse('Agent not found', { status: 404 })
     }
@@ -111,6 +112,7 @@ export async function middleware(request: NextRequest) {
               <pre><code>{
   "message": "Your message here"
 }</code></pre>
+              <p>Note: The request will automatically include the required agent authentication headers.</p>
             </div>
           </body>
         </html>
@@ -123,8 +125,14 @@ export async function middleware(request: NextRequest) {
       )
     }
 
-    // For all other requests (POST, etc), rewrite to the ngrok URL
-    return NextResponse.rewrite(new URL(device.ngrokUrl + url.pathname + url.search))
+    // For all other requests (POST, etc), rewrite to the ngrok URL with agent address header
+    const rewrittenUrl = new URL(device.ngrokUrl + url.pathname + url.search)
+    const response = NextResponse.rewrite(rewrittenUrl)
+    
+    // Add the agent address as a header
+    response.headers.set('x-agent-address', agent.agentAddress)
+    
+    return response
 
   } catch (error) {
     console.error('Error processing request:', error)
