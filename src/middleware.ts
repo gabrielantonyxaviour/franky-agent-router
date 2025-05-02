@@ -5,9 +5,8 @@ import type { NextRequest } from 'next/server'
 interface Agent {
   id: string
   subname: string
-  deviceAddress: string
-  agentAddress: string  // Added agentAddress field
-  // Add other fields as needed
+  device_address: string
+  agentAddress: string
 }
 
 // Interface for the Device response
@@ -35,7 +34,9 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next()
     }
 
-    // 1. First fetch agent by subname from Supabase
+    console.log('Processing request for subdomain:', subdomain)
+
+    // Fetch agent details
     const agentResponse = await fetch(
       `https://franky-hedera.vercel.app/api/db/agents?subname=${subdomain}`
     )
@@ -47,14 +48,14 @@ export async function middleware(request: NextRequest) {
 
     const agent: Agent = await agentResponse.json()
 
-    if (!agent || !agent.deviceAddress || !agent.agentAddress) {
+    if (!agent || !agent.device_address || !agent.agentAddress) {
       console.error(`No agent found with subname: ${subdomain}`)
       return new NextResponse('Agent not found', { status: 404 })
     }
 
-    // 2. Then fetch device details using the device address
+    // Fetch device details
     const deviceResponse = await fetch(
-      `https://franky-hedera.vercel.app/api/db/devices?address=${agent.deviceAddress}`
+      `https://franky-hedera.vercel.app/api/db/devices?address=${agent.device_address}`
     )
 
     if (!deviceResponse.ok) {
@@ -117,6 +118,11 @@ export async function middleware(request: NextRequest) {
               <pre><code>{
   "message": "Your message here"
 }</code></pre>
+              <div class="note">
+                <p>Note: The system will automatically add the following header to your request:</p>
+                <code>agent-address: ${agent.agentAddress}</code>
+                <p>You can add any additional headers to your request as needed.</p>
+              </div>
             </div>
           </body>
         </html>
@@ -130,34 +136,26 @@ export async function middleware(request: NextRequest) {
     }
 
     // For all other requests (POST, etc), rewrite to the ngrok URL
-
-    // Step 1: Create the URL to rewrite to
     const rewrittenUrl = new URL(device.ngrokUrl + url.pathname + url.search)
     
-    // Step 2: Create a completely new response with explicit headers
+    // Create headers list and copy existing headers
     const headersList = new Headers()
-    
-    // Step 3: Copy all original headers
     request.headers.forEach((value, key) => {
-      // Skip the host header as it will be set automatically
       if (key.toLowerCase() !== 'host') {
         headersList.set(key, value)
       }
     })
     
-    // Step 4: Set the agent address header - this WILL override any existing value
+    // Set the agent address header
     headersList.set('agent-address', agent.agentAddress)
-    
-    // Step 5: Log the headers to verify they're being set
     console.log('Setting header agent-address:', agent.agentAddress)
     
-    // Step 6: Create the response with our headers
     const response = NextResponse.rewrite(rewrittenUrl, {
       headers: headersList,
     })
     
-    // Step 7: Double-check that the header is set
-    if (!response.headers.has('x-agent-address')) {
+    // Verify header was set
+    if (!response.headers.has('agent-address')) {
       console.error('CRITICAL ERROR: Header not set correctly')
       response.headers.set('agent-address', agent.agentAddress)
     }
@@ -179,7 +177,7 @@ export const config = {
      * 2. /_next/* (Next.js internals)
      * 3. /_static/* (inside /public)
      * 4. /_vercel/* (Vercel internals)
-     * 5. /favicon.ico, /sitemap.xml (static files)
+     * 5. /favicon.ico, sitemap.xml (static files)
      */
     '/((?!api|_next|_static|_vercel|favicon.ico|sitemap.xml).*)',
   ],
