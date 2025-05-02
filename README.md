@@ -1,4 +1,4 @@
-# Franky
+# Franky Agents
 
 This is a simple Next.js landing page created as a starting point for future development.
 
