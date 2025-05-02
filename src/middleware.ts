@@ -136,7 +136,7 @@ export async function middleware(request: NextRequest) {
     const headers = new Headers(request.headers)
     
     // Add or override the agent address header
-    headers.set('x-agent-address', agent.agentAddress)
+    headers.set('agent-address', agent.agentAddress)
 
     // Create the rewrite response with the modified headers
     const response = NextResponse.rewrite(rewrittenUrl, {
