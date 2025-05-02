@@ -130,7 +130,7 @@ export async function middleware(request: NextRequest) {
     const response = NextResponse.rewrite(rewrittenUrl)
     
     // Add the agent address as a header
-    response.headers.set('x-agent-address', agent.agentAddress)
+    response.headers.set('agent-address', agent.agentAddress)
     
     return response
 
