@@ -5,7 +5,7 @@ import type { NextRequest } from 'next/server'
 interface Agent {
   id: string
   subname: string
-  device_address: string
+  deviceAddress: string
   agentAddress: string
 }
 
@@ -48,14 +48,14 @@ export async function middleware(request: NextRequest) {
 
     const agent: Agent = await agentResponse.json()
 
-    if (!agent || !agent.device_address || !agent.agentAddress) {
+    if (!agent || !agent.deviceAddress || !agent.agentAddress) {
       console.error(`No agent found with subname: ${subdomain}`)
       return new NextResponse('Agent not found', { status: 404 })
     }
 
     // Fetch device details
     const deviceResponse = await fetch(
-      `https://franky-hedera.vercel.app/api/db/devices?address=${agent.device_address}`
+      `https://franky-hedera.vercel.app/api/db/devices?address=${agent.deviceAddress}`
     )
 
     if (!deviceResponse.ok) {
