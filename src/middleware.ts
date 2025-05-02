@@ -28,7 +28,21 @@ export async function middleware(request: NextRequest) {
     }
 
     // Extract subdomain
-    const subdomain = hostname.split('.frankyagent.xyz')[0]
+    let subdomain = ''
+    
+    // Handle both production and development environments
+    if (hostname.includes('frankyagent.xyz')) {
+      subdomain = hostname.split('.frankyagent.xyz')[0]
+    } else if (hostname.includes('localhost')) {
+      // Support for local development
+      subdomain = hostname.split('.localhost')[0]
+    } else {
+      // Support for other environments (like Vercel previews)
+      const parts = hostname.split('.')
+      if (parts.length > 1) {
+        subdomain = parts[0]
+      }
+    }
     
     if (!subdomain) {
       return NextResponse.next()
@@ -138,29 +152,65 @@ export async function middleware(request: NextRequest) {
     // For all other requests (POST, etc), rewrite to the ngrok URL
     const rewrittenUrl = new URL(device.ngrokUrl + url.pathname + url.search)
     
-    // Create headers list and copy existing headers
-    const headersList = new Headers()
-    request.headers.forEach((value, key) => {
-      if (key.toLowerCase() !== 'host') {
-        headersList.set(key, value)
-      }
-    })
+    // Extract the original request content
+    const requestHeaders = new Headers(request.headers)
+    const body = request.body ? await request.text() : null
+    const method = request.method
     
-    // Set the agent address header
-    headersList.set('agent-address', agent.agentAddress)
-    console.log('Setting header agent-address:', agent.agentAddress)
-    
-    const response = NextResponse.rewrite(rewrittenUrl, {
-      headers: headersList,
-    })
-    
-    // Verify header was set
-    if (!response.headers.has('agent-address')) {
-      console.error('CRITICAL ERROR: Header not set correctly')
-      response.headers.set('agent-address', agent.agentAddress)
+    // Forward the request manually to ensure headers are preserved
+    try {
+      // Create a new request to forward to the target
+      const forwardRequest = new Request(rewrittenUrl.toString(), {
+        method,
+        headers: requestHeaders,
+        body,
+        redirect: 'manual',
+      })
+      
+      // Remove host header which might cause issues
+      forwardRequest.headers.delete('host')
+      
+      // Set agent-address header
+      forwardRequest.headers.set('agent-address', agent.agentAddress)
+      
+      console.log('Setting header agent-address:', agent.agentAddress)
+      
+      // Make the request to the target server
+      const targetResponse = await fetch(forwardRequest)
+      
+      // Create a Next.js response from the target response
+      const response = new NextResponse(targetResponse.body, {
+        status: targetResponse.status,
+        statusText: targetResponse.statusText,
+      })
+      
+      // Copy headers from the target response
+      targetResponse.headers.forEach((value, key) => {
+        response.headers.set(key, value)
+      })
+      
+      return response
+    } catch (error) {
+      console.error(`Error forwarding request to ${rewrittenUrl}:`, error)
+      
+      // Fall back to the rewrite method if manual forwarding fails
+      console.log('Falling back to rewrite method')
+      
+      const headersList = new Headers()
+      request.headers.forEach((value, key) => {
+        if (key.toLowerCase() !== 'host') {
+          headersList.set(key, value)
+        }
+      })
+      
+      // Set the agent address header
+      headersList.set('agent-address', agent.agentAddress)
+      console.log('Setting header agent-address (fallback):', agent.agentAddress)
+      
+      return NextResponse.rewrite(rewrittenUrl, {
+        headers: headersList,
+      })
     }
-    
-    return response
 
   } catch (error) {
     console.error('Error processing request:', error)
