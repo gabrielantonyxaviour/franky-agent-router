@@ -130,19 +130,38 @@ export async function middleware(request: NextRequest) {
     }
 
     // For all other requests (POST, etc), rewrite to the ngrok URL
+
+    // Step 1: Create the URL to rewrite to
     const rewrittenUrl = new URL(device.ngrokUrl + url.pathname + url.search)
-
-    // Create headers object from original request headers
-    const headers = new Headers(request.headers)
     
-    // Add or override the agent address header
-    headers.set('agent-address', agent.agentAddress)
-
-    // Create the rewrite response with the modified headers
-    const response = NextResponse.rewrite(rewrittenUrl, {
-      headers: headers,
+    // Step 2: Create a completely new response with explicit headers
+    const headersList = new Headers()
+    
+    // Step 3: Copy all original headers
+    request.headers.forEach((value, key) => {
+      // Skip the host header as it will be set automatically
+      if (key.toLowerCase() !== 'host') {
+        headersList.set(key, value)
+      }
     })
-
+    
+    // Step 4: Set the agent address header - this WILL override any existing value
+    headersList.set('agent-address', agent.agentAddress)
+    
+    // Step 5: Log the headers to verify they're being set
+    console.log('Setting header agent-address:', agent.agentAddress)
+    
+    // Step 6: Create the response with our headers
+    const response = NextResponse.rewrite(rewrittenUrl, {
+      headers: headersList,
+    })
+    
+    // Step 7: Double-check that the header is set
+    if (!response.headers.has('x-agent-address')) {
+      console.error('CRITICAL ERROR: Header not set correctly')
+      response.headers.set('agent-address', agent.agentAddress)
+    }
+    
     return response
 
   } catch (error) {
