@@ -52,7 +52,7 @@ export async function middleware(request: NextRequest) {
 
     // Fetch agent details
     const agentResponse = await fetch(
-      `https://franky-hedera.vercel.app/api/db/agents?subname=${subdomain}`
+      `https://franky-sui.vercel.app/api/db/agents?subname=${subdomain}`
     )
 
     if (!agentResponse.ok) {
@@ -69,7 +69,7 @@ export async function middleware(request: NextRequest) {
 
     // Fetch device details
     const deviceResponse = await fetch(
-      `https://franky-hedera.vercel.app/api/db/devices?address=${agent.deviceAddress}`
+      `https://franky-sui.vercel.app/api/db/devices?address=${agent.deviceAddress}`
     )
 
     if (!deviceResponse.ok) {
@@ -171,9 +171,9 @@ export async function middleware(request: NextRequest) {
       forwardRequest.headers.delete('host')
       
       // Set agent-address header
-      forwardRequest.headers.set('x-agent-address', agent.agentAddress)
+      forwardRequest.headers.set('agent-address', agent.agentAddress)
       
-      console.log('Setting header x-agent-address:', agent.agentAddress)
+      console.log('Setting header agent-address:', agent.agentAddress)
       
       // Make the request to the target server
       const targetResponse = await fetch(forwardRequest)
@@ -205,7 +205,7 @@ export async function middleware(request: NextRequest) {
       
       // Set the agent address header
       headersList.set('agent-address', agent.agentAddress)
-      console.log('Setting header x-agent-address (fallback):', agent.agentAddress)
+      console.log('Setting header agent-address (fallback):', agent.agentAddress)
       
       return NextResponse.rewrite(rewrittenUrl, {
         headers: headersList,
