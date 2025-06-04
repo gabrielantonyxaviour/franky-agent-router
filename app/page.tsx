@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen bg-black overflow-hidden">
+    <main className="relative min-h-screen bg-black overflow-hidden select-none">
       {/* Static space background with Franky colors */}
       <div className="absolute inset-0 z-0">
         <div className="w-full h-full bg-gradient-to-b from-[#12275c] via-black to-[#ec4618]/20">
