@@ -128,6 +128,7 @@ export default function Hero() {
                 width={140}
                 height={24}
                 className="rounded-xl border-[1.5px] border-stone-600"
+                onClick={() => window.open("https://hedera.com", "_blank")}
               />
             </div>
 
@@ -139,6 +140,7 @@ export default function Hero() {
                 width={140}
                 height={24}
                 className="rounded-xl border border-[1.5px] border-black"
+                onClick={() => window.open("https://yellow.org", "_blank")}
               />
             </div>
           </div>
