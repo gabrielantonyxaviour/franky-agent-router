@@ -10,8 +10,6 @@ export default function Globe() {
   const [isHighResLoaded, setIsHighResLoaded] = useState(false);
   const [showHint, setShowHint] = useState(true);
 
-  const backgroundStars = document.getElementById("background-stars");
-
   useEffect(() => {
     if (!mountRef.current) return;
 

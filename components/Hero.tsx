@@ -43,10 +43,10 @@ export default function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.8 }}
-          className="text-2xl md:text-3xl text-white mb-10 font-light leading-relaxed"
+          className="text-lg md:text-xl text-white mb-10 font-light leading-relaxed "
           style={{ fontFamily: "DescriptionFont, sans-serif" }}
         >
-          Monetize your old devices by powering efficient AI agents
+          Monetize your old devices by powering efficient <br /> AI agents
         </motion.p>
 
         {/* CTA Button - Cyberpunk style with fixed blur */}
