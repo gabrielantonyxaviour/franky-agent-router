@@ -108,7 +108,7 @@ export default function Hero() {
           className="space-y-2 pt-6"
         >
           <p
-            className="text-gray-300 text-xl font-medium pl-1"
+            className="text-stone-500 text-xl font-medium pl-2"
             style={{
               fontFamily: "DescriptionFont, sans-serif",
               letterSpacing: "0.05em",
