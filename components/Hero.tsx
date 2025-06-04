@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export default function Hero() {
   const handleJoinWaitlist = () => {
-    window.open("https://form.typeform.com/to/EDFIdTuk", "_blank");
+    window.open("https://form.typeform.com/to/aDtqkTJ9", "_blank");
   };
 
   return (

@@ -8,7 +8,7 @@ import { Color } from "three";
 export default function Globe() {
   const mountRef = useRef<HTMLDivElement>(null);
   const [isHighResLoaded, setIsHighResLoaded] = useState(false);
-  const [showHint, setShowHint] = useState(true);
+  // const [showHint, setShowHint] = useState(true);
 
   useEffect(() => {
     if (!mountRef.current) return;
@@ -200,9 +200,9 @@ export default function Globe() {
     };
     window.addEventListener("resize", handleResize);
 
-    const hintTimer = setTimeout(() => {
-      setShowHint(false);
-    }, 4000);
+    // const hintTimer = setTimeout(() => {
+    //   setShowHint(false);
+    // }, 4000);
 
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -215,11 +215,11 @@ export default function Globe() {
 
   return (
     <div ref={mountRef} className="w-full h-full">
-      {showHint && (
-        <div className="absolute bottom-6 right-6 bg-franky-navy/80 backdrop-blur-sm text-franky-cyan text-sm px-4 py-2 rounded-full border border-franky-cyan/30 transition-opacity duration-1000 opacity-80 hover:opacity-100 animate-pulse">
-          Drag to explore the future
-        </div>
-      )}
+      {/* {showHint && (
+      <div className="absolute bottom-6 right-6 bg-franky-navy/80 backdrop-blur-sm text-franky-cyan text-sm px-4 py-2 rounded-full border border-franky-cyan/30 transition-opacity duration-1000 opacity-80 hover:opacity-100 animate-pulse">
+        Drag to explore the future
+      </div>
+    )} */}
     </div>
   );
 }
