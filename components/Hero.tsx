@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export default function Hero() {
   const handleJoinWaitlist = () => {
-    window.open("https://typeform.com/to/your-form-id", "_blank");
+    window.open("https://form.typeform.com/to/EDFIdTuk", "_blank");
   };
 
   return (
@@ -24,16 +24,19 @@ export default function Hero() {
             alt="Franky"
             width={150}
             height={150}
-            className="mb-4 ml-1 rounded-xl "
+            className="mb-8 ml-1 rounded-xl "
           />
 
-          {/* Clean logo text - no background */}
+          {/* Clean logo text - gradient color */}
           <div className="relative">
             <h1
-              className="text-3xl md:text-5xl font-bold text-white"
-              style={{ fontFamily: "LogoFont, sans-serif" }}
+              className="text-4xl md:text-5xl font-bold bg-[#ec4618] bg-clip-text text-transparent"
+              style={{
+                fontFamily: "LogoFont, sans-serif",
+                letterSpacing: "0.02em",
+              }}
             >
-              FRANKY AGENTS
+              FRANKY <span className="text-[#038fa8] opacity-100">AGENTS</span>
             </h1>
           </div>
         </motion.div>
@@ -43,10 +46,14 @@ export default function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.8 }}
-          className="text-lg md:text-xl text-white mb-10 font-light leading-relaxed "
-          style={{ fontFamily: "DescriptionFont, sans-serif" }}
+          className="text-xl md:text-2xl text-gray-300 mb-10 font-light"
+          style={{
+            fontFamily: "DescriptionFont, sans-serif",
+            letterSpacing: "0.05em",
+            lineHeight: "1.2",
+          }}
         >
-          Monetize your old devices by powering efficient <br /> AI agents
+          Monetize your old devices by powering efficient AI agents
         </motion.p>
 
         {/* CTA Button - Cyberpunk style with fixed blur */}
