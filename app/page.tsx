@@ -1,10 +1,8 @@
 "use client";
-import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import Hero from "@/components/Hero";
 import FloatingObjects from "@/components/FloatingObjects";
 import Globe from "@/components/Globe";
-import { motion } from "framer-motion";
 
 export default function Home() {
   return (
