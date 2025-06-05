@@ -133,7 +133,7 @@ export default function Hero() {
             </div>
 
             {/* Yellow Logo */}
-            <div className="flex items-center space-x-2">
+            {/* <div className="flex items-center space-x-2">
               <Image
                 src="/yellow.png"
                 alt="Yellow"
@@ -142,7 +142,7 @@ export default function Hero() {
                 className="rounded-xl border border-[1.5px] border-black"
                 onClick={() => window.open("https://yellow.org", "_blank")}
               />
-            </div>
+            </div> */}
           </div>
         </motion.div>
       </div>
