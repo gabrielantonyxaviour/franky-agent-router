@@ -9,6 +9,9 @@ FrankyAgent is a decentralized framework for deploying and monetizing local AI a
 * **♻️ Local LLM on Phones**
   Each device runs a lightweight agent using the **Hedera Agent Kit** for on-device inference and integration with Hedera services.
 
+* ** State Channels for API consumption**
+  Each API call triggers a state update in off chain channels to save gas and increase performance speed
+
 * **📡 Private Consensus Service for Validation**
   Devices publish their uptime, latency, and behavior metrics to a **self-hosted Consensus Service** on Hedera, enabling efficient and verifiable performance tracking.
   Hedera's **HCS-10 standard** is used exclusively for agent interaction and communication.
