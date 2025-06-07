@@ -73,7 +73,7 @@ FrankyAgent is a decentralized framework for deploying and monetizing local AI a
 * **HCS-10** – Agent communication format.
 * **Hedera Token Service** – Agent ownership via NFT and \$HBAR-based incentives.
 
-## 🔮 Roadmap
+## 🔮 Roadmap / What's next
 
 * [x] Local agent with Hedera Agent Kit + Ollama
 * [x] Telemetry publishing via private HCS
