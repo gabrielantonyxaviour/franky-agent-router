@@ -73,7 +73,36 @@ export default function Hero() {
             {/* Cyberpunk button */}
             <button
               onClick={handleJoinWaitlist}
-              className="relative bg-black border border-franky-orange/50 text-white font-bold text-base lg:text-lg px-8 lg:px-12 py-3 lg:py-4 rounded-md transform transition-all duration-300 hover:scale-105 group overflow-hidden"
+              className="relative bg-black border border-blue-500/50 text-white font-bold text-base lg:text-lg px-8 lg:px-12 py-3 lg:py-4 rounded-md transform transition-all duration-300 hover:scale-105 group overflow-hidden mr-2"
+            >
+              {/* Diagonal stripes */}
+              <div
+                className="absolute inset-0 w-full h-full opacity-20"
+                style={{
+                  backgroundImage:
+                    "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(59,130,246,0.5) 10px, rgba(59,130,246,0.5) 20px)",
+                }}
+              ></div>
+
+              {/* Button content */}
+              <div className="relative flex items-center justify-center">
+                <span>FILL SURVEY</span>
+                <ArrowRight
+                  className="ml-2 group-hover:translate-x-1 transition-transform"
+                  size={20}
+                />
+              </div>
+
+              {/* Highlights */}
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-franky-yellow to-transparent"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-franky-orange to-transparent"></div>
+            </button>
+
+            <button
+              onClick={() =>
+                window.open("https://franky-alpha.vercel.app", "_blank")
+              }
+              className="relative bg-black border border-franky-orange/50 text-white font-bold text-base lg:text-lg px-8 lg:px-12 py-3 lg:py-4 rounded-md transform transition-all duration-300 hover:scale-105 group overflow-hidden ml-2"
             >
               {/* Diagonal stripes */}
               <div
@@ -86,7 +115,7 @@ export default function Hero() {
 
               {/* Button content */}
               <div className="relative flex items-center justify-center">
-                <span>JOIN WAITLIST</span>
+                <span>TRY ALPHA</span>
                 <ArrowRight
                   className="ml-2 group-hover:translate-x-1 transition-transform"
                   size={20}
