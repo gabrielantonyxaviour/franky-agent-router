@@ -1,4 +1,5 @@
-# Franky
+# Franky Agents
+
 ![image](https://github.com/user-attachments/assets/f0c938d4-0667-4859-a839-4ec2d6f30e21)
 
 FrankyAgent is a decentralized framework for deploying and monetizing local AI agents running directly on user devices (e.g. phones). It enables on-device inference using lightweight LLMs, tracks agent performance through a private Hedera Consensus Service, and incentivizes high-uptime nodes using \$HBAR. Agent ownership is recorded using NFTs minted via the Hedera Token Service.
@@ -7,6 +8,9 @@ FrankyAgent is a decentralized framework for deploying and monetizing local AI a
 
 * **♻️ Local LLM on Phones**
   Each device runs a lightweight agent using the **Hedera Agent Kit** for on-device inference and integration with Hedera services.
+
+* ** State Channels for API consumption**
+  Each API call triggers a state update in off chain channels to save gas and increase performance speed
 
 * **📡 Private Consensus Service for Validation**
   Devices publish their uptime, latency, and behavior metrics to a **self-hosted Consensus Service** on Hedera, enabling efficient and verifiable performance tracking.
@@ -69,11 +73,12 @@ FrankyAgent is a decentralized framework for deploying and monetizing local AI a
 * **HCS-10** – Agent communication format.
 * **Hedera Token Service** – Agent ownership via NFT and \$HBAR-based incentives.
 
-## 🔮 Roadmap
+## 🔮 Roadmap / What's next
 
 * [x] Local agent with Hedera Agent Kit + Ollama
 * [x] Telemetry publishing via private HCS
 * [x] \$HBAR rewards via HTS
+* [ ] State Channels for API call credit consumption
 * [ ] Graph-based reputation explorer
 * [ ] Federated moderation for flagging agents
 * [ ] Device swarms for distributed coordination
